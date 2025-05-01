@@ -87,12 +87,12 @@ A Java-based desktop application to **automatically generate class routines** fo
 
 ## 👥 Team Members
 
-| Name                  | ID                    | Section |
-|-----------------------|------------------------|---------|
-| Ashraful              | 0272320005101225       | 63(D)   |
-| Sumaiya Akter Bonna   | 0272320005101252       | 63(D)   |
-| Tanjina Akter Mohema  | 0272320005101279       | 63(D)   |
-| Sagor Kumar Das       | 0272320005101264       | 63(D)   |
+| Name                    | ID                    | Section |
+|-------------------------|-----------------------|---------|
+| Ashraful (Team Leader)  | 0272320005101225      | 63(D)   |
+| Sumaiya Akter Bonna     | 0272320005101252      | 63(D)   |
+| Tanjina Akter Mohema    | 0272320005101279      | 63(D)   |
+| Sagor Kumar Das         | 0272320005101264      | 63(D)   |
 
 ---
 
