@@ -1,16 +1,16 @@
 import javax.swing.*;
 
 import database.SchemaCreator;
-import gui.MainWindow;
+import gui.DashboardWindow;
 
 public class Main {
    public static void main(String[] args) {
-      // Create database tables
+      // 🗃️ Step 1: Create database tables (if not exists)
       SchemaCreator.createTables();
 
-
+      // 🖥️ Step 2: Launch the main dashboard
       SwingUtilities.invokeLater(() -> {
-         MainWindow window = new MainWindow();
+         DashboardWindow window = new DashboardWindow();
          window.setVisible(true);
       });
    }

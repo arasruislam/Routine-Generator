@@ -12,9 +12,13 @@ public class DatabaseHelper {
       if (connection == null) {
          try {
             connection = DriverManager.getConnection(URL);
-            System.out.println("Database connected successfully.");
+            System.out.println("✅ Database connected successfully.");
+
+            // 🆕 Automatically create all tables when DB connects
+            SchemaCreator.createTables(); // <- this line added
+
          } catch (SQLException e) {
-            System.out.println("Failed to connect to database.");
+            System.out.println("❌ Failed to connect to database.");
             e.printStackTrace();
          }
       }
