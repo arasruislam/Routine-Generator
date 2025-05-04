@@ -1,6 +1,8 @@
-
 // src/gui/DashboardWindow.java
 package gui;
+
+import gui.forms.TeacherForm;
+import gui.forms.CourseForm;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,9 +19,9 @@ public class DashboardWindow extends JFrame {
       setLocationRelativeTo(null);
       setLayout(new BorderLayout());
 
-      initSidebar();
-      initTopbar();
-      initContentArea();
+      initSidebar(); // ⬅️ Sidebar with button actions
+      initTopbar(); // ⬅️ Topbar with title
+      initContentArea();// ⬅️ Main area to display forms
 
       setVisible(true);
    }
@@ -30,14 +32,39 @@ public class DashboardWindow extends JFrame {
       sidebarPanel.setBackground(new Color(40, 40, 80));
       sidebarPanel.setPreferredSize(new Dimension(200, getHeight()));
 
-      String[] buttons = { "Home", "Add Teacher", "Add Course", "Add Room", "Add Batch", "Generate Routine" };
-      for (String btnText : buttons) {
-         JButton button = new JButton(btnText);
-         button.setAlignmentX(Component.CENTER_ALIGNMENT);
-         button.setMaximumSize(new Dimension(180, 40));
-         sidebarPanel.add(Box.createVerticalStrut(20));
-         sidebarPanel.add(button);
-      }
+      sidebarPanel.add(Box.createVerticalStrut(20));
+
+      // 🎯 Updated with buttons that load forms
+      JButton homeBtn = createSidebarButton("🏠 Home");
+      homeBtn.addActionListener(e -> loadContent(new JLabel("Welcome to Dashboard! 🎓", SwingConstants.CENTER)));
+
+      JButton teacherBtn = createSidebarButton("👨‍🏫 Add Teacher");
+      teacherBtn.addActionListener(e -> loadContent(new TeacherForm()));
+
+      JButton courseBtn = createSidebarButton("📚 Add Course");
+      courseBtn.addActionListener(e -> loadContent(new CourseForm()));
+
+      JButton roomBtn = createSidebarButton("🏫 Add Room");
+      // You can later add form e.g., roomBtn.addActionListener(e -> loadContent(new
+      // RoomForm()));
+
+      JButton batchBtn = createSidebarButton("👥 Add Batch");
+      // batchBtn.addActionListener(...);
+
+      JButton routineBtn = createSidebarButton("🧠 Generate Routine");
+      // routineBtn.addActionListener(...);
+
+      sidebarPanel.add(homeBtn);
+      sidebarPanel.add(Box.createVerticalStrut(15));
+      sidebarPanel.add(teacherBtn);
+      sidebarPanel.add(Box.createVerticalStrut(15));
+      sidebarPanel.add(courseBtn);
+      sidebarPanel.add(Box.createVerticalStrut(15));
+      sidebarPanel.add(roomBtn);
+      sidebarPanel.add(Box.createVerticalStrut(15));
+      sidebarPanel.add(batchBtn);
+      sidebarPanel.add(Box.createVerticalStrut(15));
+      sidebarPanel.add(routineBtn);
 
       add(sidebarPanel, BorderLayout.LINE_START);
    }
@@ -61,6 +88,31 @@ public class DashboardWindow extends JFrame {
       contentPanel.setLayout(new BorderLayout());
       contentPanel.setBackground(Color.WHITE);
       add(contentPanel, BorderLayout.CENTER);
+
+      // 🟨 Default content view
+      JLabel welcomeLabel = new JLabel("Welcome to the University Routine System", SwingConstants.CENTER);
+      welcomeLabel.setFont(new Font("Segoe UI", Font.BOLD, 22));
+      contentPanel.add(welcomeLabel, BorderLayout.CENTER);
+   }
+
+   // 🔁 Helper method to load forms dynamically
+   private void loadContent(JComponent component) {
+      contentPanel.removeAll();
+      contentPanel.add(component, BorderLayout.CENTER);
+      contentPanel.revalidate();
+      contentPanel.repaint();
+   }
+
+   // 🎨 Helper method for styled buttons
+   private JButton createSidebarButton(String text) {
+      JButton button = new JButton(text);
+      button.setAlignmentX(Component.CENTER_ALIGNMENT);
+      button.setMaximumSize(new Dimension(180, 40));
+      button.setFocusPainted(false);
+      button.setBackground(new Color(60, 60, 100));
+      button.setForeground(Color.WHITE);
+      button.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+      return button;
    }
 
    public static void main(String[] args) {
