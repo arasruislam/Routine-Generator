@@ -1,7 +1,9 @@
 package gui;
 
 import gui.forms.TeacherForm;
+import gui.forms.BatchForm;
 import gui.forms.CourseForm;
+import gui.forms.RoomForm;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -81,18 +83,17 @@ public class DashboardWindow extends JFrame {
          loadContent(homePanel);
       });
 
-      JButton teacherBtn = createSidebarButton("👨‍🏫 Add Teacher");
+      JButton teacherBtn = createSidebarButton("👨 Add Teacher");
       teacherBtn.addActionListener(e -> loadContent(new TeacherForm()));
 
       JButton courseBtn = createSidebarButton("📚 Add Course");
       courseBtn.addActionListener(e -> loadContent(new CourseForm()));
 
       JButton roomBtn = createSidebarButton("🏫 Add Room");
-      // You can later add form e.g., roomBtn.addActionListener(e -> loadContent(new
-      // RoomForm()));
+      roomBtn.addActionListener(e -> loadContent(new RoomForm()));
 
       JButton batchBtn = createSidebarButton("👥 Add Batch");
-      // batchBtn.addActionListener(...);
+      batchBtn.addActionListener(e -> loadContent(new BatchForm()));
 
       JButton routineBtn = createSidebarButton("🧠 Generate Routine");
       // routineBtn.addActionListener(...);

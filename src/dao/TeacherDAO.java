@@ -1,7 +1,9 @@
-package database;
+package dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+
+import database.DatabaseHelper;
 
 public class TeacherDAO {
    public static boolean insertTeacher(String name, String department) {

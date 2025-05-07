@@ -1,8 +1,10 @@
 package gui.forms;
 
-import database.TeacherDAO;
 
 import javax.swing.*;
+
+import dao.TeacherDAO;
+
 import java.awt.*;
 import java.awt.event.*;
 
