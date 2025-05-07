@@ -9,18 +9,29 @@ public class DatabaseHelper {
    private static Connection connection = null;
 
    public static Connection getConnection() {
-      if (connection == null) {
-         try {
+      // if (connection == null) {
+      //    try {
+      //       connection = DriverManager.getConnection(URL);
+      //       System.out.println("✅ Database connected successfully.");
+
+      //       // connection = DriverManager.getConnection(URL);
+
+      //       // 🆕 Automatically create all tables when DB connects
+      //       // SchemaCreator.createTables(); // <- this line added
+
+      //    } catch (SQLException e) {
+      //       System.out.println("❌ Failed to connect to database.");
+      //       e.printStackTrace();
+      //    }
+      // }
+      try {
+         if (connection == null || connection.isClosed()) {
             connection = DriverManager.getConnection(URL);
             System.out.println("✅ Database connected successfully.");
-
-            // 🆕 Automatically create all tables when DB connects
-            SchemaCreator.createTables(); // <- this line added
-
-         } catch (SQLException e) {
-            System.out.println("❌ Failed to connect to database.");
-            e.printStackTrace();
          }
+      } catch (SQLException e) {
+         System.out.println("❌ Failed to connect to database.");
+         e.printStackTrace();
       }
       return connection;
    }
