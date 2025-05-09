@@ -29,6 +29,10 @@ public class RoutineGenerator {
                System.out.println("❌ No slot available for: " + course.name);
             }
          }
+         System.out.println("Courses found for batch " + batchId + ":");
+         // for (Course c : courses) {
+         //    System.out.println("➡️ " + c.name + " (" + c.department + ")");
+         // }
 
          System.out.println("✅ Routine generated successfully for batch ID: " + batchId);
 
@@ -106,6 +110,7 @@ public class RoutineGenerator {
                rs.getString("code"),
                rs.getString("department")));
       }
+      
       return list;
    }
 

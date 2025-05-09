@@ -1,15 +1,38 @@
 package gui;
 
-import gui.forms.TeacherForm;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.RenderingHints;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.border.Border;
+
 import gui.forms.BatchForm;
 import gui.forms.CourseForm;
 import gui.forms.RoomForm;
-
-import javax.swing.*;
-import javax.swing.border.Border;
-
-import java.awt.*;
-import java.awt.event.*;
+import gui.forms.RoutineSlotForm;
+import gui.forms.TeacherForm;
+import logic.RoutineGenerator;
 
 public class DashboardWindow extends JFrame {
    private JPanel sidebarPanel;
@@ -40,7 +63,8 @@ public class DashboardWindow extends JFrame {
 
       // 🎯 Updated with buttons that load forms
       JButton homeBtn = createSidebarButton("🏠 Home");
-      // homeBtn.addActionListener(e -> loadContent(new JLabel("Welcome to Dashboard! 🎓", SwingConstants.CENTER)));
+      // homeBtn.addActionListener(e -> loadContent(new JLabel("Welcome to Dashboard!
+      // 🎓", SwingConstants.CENTER)));
       homeBtn.addActionListener(e -> {
          JPanel homePanel = new JPanel(new GridBagLayout());
          homePanel.setBackground(Color.WHITE);
@@ -95,8 +119,15 @@ public class DashboardWindow extends JFrame {
       JButton batchBtn = createSidebarButton("👥 Add Batch");
       batchBtn.addActionListener(e -> loadContent(new BatchForm()));
 
+      JButton slotBtn = createSidebarButton("⏱ Add Slot");
+      slotBtn.addActionListener(e -> loadContent(new RoutineSlotForm()));
+      sidebarPanel.add(slotBtn);
+
       JButton routineBtn = createSidebarButton("🧠 Generate Routine");
-      // routineBtn.addActionListener(...);
+      routineBtn.addActionListener(e -> {
+         loadContent(new RoutineTablePanel(1)); // use correct batch ID
+      });
+      sidebarPanel.add(routineBtn);
 
       sidebarPanel.add(homeBtn);
       sidebarPanel.add(Box.createVerticalStrut(15));
@@ -114,17 +145,18 @@ public class DashboardWindow extends JFrame {
    }
 
    // private void initTopbar() {
-   //    topbarPanel = new JPanel();
-   //    topbarPanel.setBackground(new Color(60, 60, 100));
-   //    topbarPanel.setPreferredSize(new Dimension(getWidth(), 50));
-   //    topbarPanel.setLayout(new FlowLayout(FlowLayout.CENTER)); // Centering the title
+   // topbarPanel = new JPanel();
+   // topbarPanel.setBackground(new Color(60, 60, 100));
+   // topbarPanel.setPreferredSize(new Dimension(getWidth(), 50));
+   // topbarPanel.setLayout(new FlowLayout(FlowLayout.CENTER)); // Centering the
+   // title
 
-   //    JLabel title = new JLabel("📅 University Routine Generator");
-   //    title.setForeground(Color.WHITE);
-   //    title.setFont(new Font("Segoe UI", Font.BOLD, 18));
+   // JLabel title = new JLabel("📅 University Routine Generator");
+   // title.setForeground(Color.WHITE);
+   // title.setFont(new Font("Segoe UI", Font.BOLD, 18));
 
-   //    topbarPanel.add(title);
-   //    add(topbarPanel, BorderLayout.PAGE_START);
+   // topbarPanel.add(title);
+   // add(topbarPanel, BorderLayout.PAGE_START);
    // }
    private void initTopbar() {
       topbarPanel = new JPanel(new BorderLayout());
