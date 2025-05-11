@@ -1,6 +1,7 @@
 package database;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 public class SchemaCreator {
@@ -59,7 +60,16 @@ public class SchemaCreator {
                               "FOREIGN KEY (batch_id) REFERENCES batches(id)" +
                               ");";
 
-                  String alterClassAssignments = "ALTER TABLE class_assignments ADD COLUMN version_id INTEGER;";
+                  try {
+                        String alterClassAssignments = "ALTER TABLE class_assignments ADD COLUMN version_id INTEGER;";
+                        stmt.execute(alterClassAssignments);
+                  } catch (SQLException e) {
+                        if (e.getMessage().contains("duplicate column name")) {
+                              System.out.println("ℹ️ 'version_id' already exists in class_assignments.");
+                        } else {
+                              e.printStackTrace();
+                        }
+                  }
 
                   stmt.execute(createTeachers);
                   stmt.execute(createCourses);
@@ -68,7 +78,6 @@ public class SchemaCreator {
                   stmt.execute(createRoutineSlots);
                   stmt.execute(createAssignments);
                   stmt.execute(createRoutineVersions);
-                  stmt.execute(alterClassAssignments);
 
                   System.out.println("✅ Tables created successfully!");
 
