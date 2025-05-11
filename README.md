@@ -1,5 +1,7 @@
 # 🧠 Smart Routine Generator System
 
+![Routine Application Overview](./Screenshot%202025-05-12%20at%205.48.42%20AM.png)
+
 A Java-based desktop application to **automatically generate class routines** for universities based on specific **batch, semester, and class data**, with proper **teacher and room assignment**, **break management**, and **PDF export** functionality. The app ensures **no teacher or room clashes** and provides a fully interactive GUI, backed by **SQLite database**.
 
 ---
