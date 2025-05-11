@@ -31,6 +31,9 @@ import gui.forms.CourseForm;
 import gui.forms.RoomForm;
 import gui.forms.RoutineSlotForm;
 import gui.forms.TeacherForm;
+import routine.RoutineHistoryPanel;
+import routine.RoutineTablePanel;
+import routine.TeacherRoutinePanel;
 
 public class DashboardWindow extends JFrame {
    private JPanel sidebarPanel;
@@ -130,6 +133,10 @@ public class DashboardWindow extends JFrame {
       JButton teacherRoutineBtn = createSidebarButton("👨‍🏫 Teacher Routine");
       teacherRoutineBtn.addActionListener(e -> loadContent(new TeacherRoutinePanel()));
       sidebarPanel.add(teacherRoutineBtn);
+
+      JButton historyBtn = createSidebarButton("🕘 Routine History");
+      historyBtn.addActionListener(e -> loadContent(new RoutineHistoryPanel()));
+      sidebarPanel.add(historyBtn);
 
       sidebarPanel.add(homeBtn);
       sidebarPanel.add(Box.createVerticalStrut(15));
