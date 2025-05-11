@@ -22,7 +22,6 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
@@ -32,7 +31,6 @@ import gui.forms.CourseForm;
 import gui.forms.RoomForm;
 import gui.forms.RoutineSlotForm;
 import gui.forms.TeacherForm;
-import logic.RoutineGenerator;
 
 public class DashboardWindow extends JFrame {
    private JPanel sidebarPanel;
@@ -125,7 +123,7 @@ public class DashboardWindow extends JFrame {
 
       JButton routineBtn = createSidebarButton("🧠 Generate Routine");
       routineBtn.addActionListener(e -> {
-         loadContent(new RoutineTablePanel(1)); // use correct batch ID
+         loadContent(new RoutineTablePanel());
       });
       sidebarPanel.add(routineBtn);
 

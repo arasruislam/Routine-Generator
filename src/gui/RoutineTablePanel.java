@@ -1,63 +1,112 @@
 package gui;
 
-import java.awt.BorderLayout;
-import java.awt.Font;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-
 import database.DatabaseHelper;
+import utils.PDFExporter;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RoutineTablePanel extends JPanel {
 
-   public RoutineTablePanel(int batchId) {
+   private JComboBox<String> batchBox;
+   private Map<String, Integer> batchMap;
+   private JTable routineTable;
+   private DefaultTableModel model;
+
+   public RoutineTablePanel() {
       setLayout(new BorderLayout());
-      JLabel title = new JLabel("📅 Routine Preview", JLabel.CENTER);
+
+      // Top Panel with Dropdown
+      JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+      JLabel title = new JLabel("📅 Routine Preview");
       title.setFont(new Font("Segoe UI", Font.BOLD, 18));
-      add(title, BorderLayout.NORTH);
 
-      String[] columns = {
-            "Time Slot", "Saturday", "Sunday", "Monday", "Tuesday"
-      };
-
-      DefaultTableModel model = new DefaultTableModel(columns, 0);
-      JTable table = new JTable(model);
-      JScrollPane scrollPane = new JScrollPane(table);
+      batchBox = new JComboBox<>();
+      batchMap = new HashMap<>();
 
       try (Connection conn = DatabaseHelper.getConnection()) {
-         // Load slots
+         ResultSet rs = conn.createStatement().executeQuery("SELECT id, semester, batch_name FROM batches");
+         while (rs.next()) {
+            String name = rs.getString("semester") + " - " + rs.getString("batch_name");
+            int id = rs.getInt("id");
+            batchBox.addItem(name);
+            batchMap.put(name, id);
+         }
+      } catch (Exception e) {
+         e.printStackTrace();
+      }
+
+      batchBox.addActionListener(e -> {
+         String selected = (String) batchBox.getSelectedItem();
+         int batchId = batchMap.get(selected);
+         loadRoutine(batchId);
+      });
+
+      topPanel.add(title);
+      topPanel.add(new JLabel("🧪 Batch:"));
+      topPanel.add(batchBox);
+      add(topPanel, BorderLayout.NORTH);
+
+      // Table Setup
+      String[] columns = { "Time Slot", "Saturday", "Sunday", "Monday", "Tuesday" };
+      model = new DefaultTableModel(columns, 0);
+      routineTable = new JTable(model);
+      add(new JScrollPane(routineTable), BorderLayout.CENTER);
+
+      // Export Button
+      JButton exportBtn = new JButton("📄 Export to PDF");
+      exportBtn.addActionListener(e -> {
+         String selectedBatch = (String) batchBox.getSelectedItem();
+         int batchId = batchMap.get(selectedBatch);
+         PDFExporter.exportRoutineToPDF(batchId, "routine_batch_" + batchId + ".pdf");
+         JOptionPane.showMessageDialog(this, "✅ PDF exported!");
+      });
+      add(exportBtn, BorderLayout.SOUTH);
+
+      // Load initial routine (first batch)
+      if (batchBox.getItemCount() > 0) {
+         batchBox.setSelectedIndex(0);
+      }
+   }
+
+   private void loadRoutine(int batchId) {
+      model.setRowCount(0); // clear previous
+
+      try (Connection conn = DatabaseHelper.getConnection()) {
          PreparedStatement slotStmt = conn.prepareStatement(
                "SELECT DISTINCT start_time, end_time FROM routine_slots ORDER BY start_time");
          ResultSet slotRs = slotStmt.executeQuery();
 
          while (slotRs.next()) {
-            String slotTime = slotRs.getString("start_time") + " - " + slotRs.getString("end_time");
-            String[] row = new String[5];
-            row[0] = slotTime;
+            String start = slotRs.getString("start_time");
+            String end = slotRs.getString("end_time");
+            String timeSlot = start + " - " + end;
 
-            // For each day
+            String[] row = new String[5];
+            row[0] = timeSlot;
+
             String[] days = { "Saturday", "Sunday", "Monday", "Tuesday" };
             for (int i = 0; i < days.length; i++) {
-               String sql = "SELECT c.code, r.room_number FROM class_assignments ca " +
+               String query = "SELECT c.code, r.room_number FROM class_assignments ca " +
                      "JOIN courses c ON ca.course_id = c.id " +
                      "JOIN rooms r ON ca.room_id = r.id " +
                      "JOIN routine_slots rs ON ca.slot_id = rs.id " +
                      "WHERE rs.start_time = ? AND rs.end_time = ? AND rs.day = ? AND ca.batch_id = ?";
-               PreparedStatement stmt = conn.prepareStatement(sql);
-               stmt.setString(1, slotRs.getString("start_time"));
-               stmt.setString(2, slotRs.getString("end_time"));
+               PreparedStatement stmt = conn.prepareStatement(query);
+               stmt.setString(1, start);
+               stmt.setString(2, end);
                stmt.setString(3, days[i]);
                stmt.setInt(4, batchId);
                ResultSet rs = stmt.executeQuery();
 
                if (rs.next()) {
-                  row[i + 1] = rs.getString("code") + " (" + rs.getString("room_number") + ")";
+                  String code = rs.getString("code");
+                  String room = rs.getString("room_number");
+                  row[i + 1] = code + " (" + room + ")";
                } else {
                   row[i + 1] = "";
                }
@@ -69,7 +118,5 @@ public class RoutineTablePanel extends JPanel {
       } catch (Exception e) {
          e.printStackTrace();
       }
-
-      add(scrollPane, BorderLayout.CENTER);
    }
 }
