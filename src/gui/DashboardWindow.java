@@ -127,6 +127,10 @@ public class DashboardWindow extends JFrame {
       });
       sidebarPanel.add(routineBtn);
 
+      JButton teacherRoutineBtn = createSidebarButton("👨‍🏫 Teacher Routine");
+      teacherRoutineBtn.addActionListener(e -> loadContent(new TeacherRoutinePanel()));
+      sidebarPanel.add(teacherRoutineBtn);
+
       sidebarPanel.add(homeBtn);
       sidebarPanel.add(Box.createVerticalStrut(15));
       sidebarPanel.add(teacherBtn);
